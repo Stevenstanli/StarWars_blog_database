@@ -140,7 +140,9 @@ class Films(Base):
     __tablename__ = 'login'
     # Notice that each column is also a normal Python instance attribute. 
     id = Column(Integer, primary_key=True)
-    Password string
+    Password = Column(String(500), nullable=False)
+    Pepeer = Column(String(500), nullable=False)
+    salt = Column(String(500), nullable=False)
 
     class Favorites(Base):
     __tablename__ = 'favorites'
