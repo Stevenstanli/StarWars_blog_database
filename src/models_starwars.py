@@ -8,46 +8,7 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Films(Base):
-    __tablename__ = 'films'
-    # Notice that each column is also a normal Python instance attribute. 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False)
-    created = Column(String(100), nullable=False)
-    edited = Column(String(100), nullable=False)
-    producer = Column(String(100), nullable=False)
-    episode_id = Column(Integer, nullable=False)
-    director = Column(String(100), nullable=False)
-    release_date = Column(String(250), nullable=False)
-    opening_crawl = Column(String(250), nullable=False)
-    url = Column(String(250), nullable=False)
-    description = Column(String(250), nullable=False)
-    Id_People = Column(db.Integer, db.ForeignKey('people.Id'), nullable=False)
-    Id_Planets = Column(db.Integer, db.ForeignKey('planets.Id'), nullable=False)
-    Id_starships = Column(db.Integer, db.ForeignKey('starships.Id'), nullable=False)
-    Id_vehicles = Column(db.Integer, db.ForeignKey('vehicles.Id'), nullable=False)
-    Id_species = Column(db.Integer, db.ForeignKey('species.Id'), nullable=False)
-
-
-    class People(Base):
-    __tablename__ = 'people'
-    # Notice that each column is also a normal Python instance attribute. 
-    id = Column(Integer, primary_key=True)
-    Name = Column(String(50), nullable=False)
-    Height = Column(String(50), nullable=False)
-    Mass = Column(String(50), nullable=False)
-    Hair_color = Column(String(50), nullable=False)
-    Skin_color = Column(String(50), nullable=False)
-    Eye_color = Column(String(50), nullable=False)
-    Birth_year = Column(String(50), nullable=False)
-    Gender = Column(String(50), nullable=False)
-    Created = Column(String(50), nullable=False)
-    Edited = Column(String(50), nullable=False)
-    Id_Homeworld = Column(db.Integer, db.ForeignKey('planets.Id'), nullable=False)
-    Url = Column(String(250), nullable=False)
-    Description = Column(String(250), nullable=False)
-
-    class Planets(Base):
+class Planets(Base):
     __tablename__ = 'planets'
     # Notice that each column is also a normal Python instance attribute. 
     id = Column(Integer, primary_key=True)
@@ -65,7 +26,26 @@ class Films(Base):
     Url = Column(String(250), nullable=False)
     Description = Column(String(250), nullable=False)
 
-    class Species(Base):
+class People(Base):
+    __tablename__ = 'people'
+    # Notice that each column is also a normal Python instance attribute. 
+    id = Column(Integer, primary_key=True)
+    Name = Column(String(50), nullable=False)
+    Height = Column(String(50), nullable=False)
+    Mass = Column(String(50), nullable=False)
+    Hair_color = Column(String(50), nullable=False)
+    Skin_color = Column(String(50), nullable=False)
+    Eye_color = Column(String(50), nullable=False)
+    Birth_year = Column(String(50), nullable=False)
+    Gender = Column(String(50), nullable=False)
+    Created = Column(String(50), nullable=False)
+    Edited = Column(String(50), nullable=False)
+    Id_Homeworld = Column(Integer, ForeignKey('planets.Id'), nullable=False)
+    Url = Column(String(250), nullable=False)
+    Description = Column(String(250), nullable=False)
+    PeopleId = relationship('planets')
+
+class Species(Base):
     __tablename__ = 'species'
     # Notice that each column is also a normal Python instance attribute. 
     id = Column(Integer, primary_key=True)
@@ -77,15 +57,17 @@ class Films(Base):
     Hair_colors = Column(String(50), nullable=False)
     Skin_colors = Column(String(50), nullable=False)
     Eye_colors = Column(String(50), nullable=False)
-    Id_Homeworld = Column(db.Integer, db.ForeignKey('planets.Id'), nullable=False)
+    Id_Homeworld = Column(Integer, ForeignKey('planets.Id'), nullable=False)
     Language = Column(String(50), nullable=False)
-    Id_People = Column(db.Integer, db.ForeignKey('people.Id'), nullable=False)
+    Id_People = Column(Integer, ForeignKey('people.Id'), nullable=False)
     Created = Column(String(50), nullable=False)
     Edited = Column(String(50), nullable=False)
     Url = Column(String(250), nullable=False)
     Description = Column(String(250), nullable=False)
+    PeopleId = relationship('people')
+    PeopleId = relationship('planets')
 
-    class Starships(Base):
+class Starships(Base):
     __tablename__ = 'starships'
     # Notice that each column is also a normal Python instance attribute. 
     id = Column(Integer, primary_key=True)
@@ -107,7 +89,7 @@ class Films(Base):
     url = Column(String(250), nullable=False)
     description = Column(String(250), nullable=False)
 
-    class Vehicles(Base):
+class Vehicles(Base):
     __tablename__ = 'vehicles'
     # Notice that each column is also a normal Python instance attribute. 
     id = Column(Integer, primary_key=True)
@@ -127,16 +109,42 @@ class Films(Base):
     Url = Column(String(250), nullable=False)
     Description = Column(String(250), nullable=False)
 
-    class User(Base):
+class Films(Base):
+    __tablename__ = 'films'
+    # Notice that each column is also a normal Python instance attribute. 
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False)
+    created = Column(String(100), nullable=False)
+    edited = Column(String(100), nullable=False)
+    producer = Column(String(100), nullable=False)
+    episode_id = Column(Integer, nullable=False)
+    director = Column(String(100), nullable=False)
+    release_date = Column(String(250), nullable=False)
+    opening_crawl = Column(String(250), nullable=False)
+    url = Column(String(250), nullable=False)
+    description = Column(String(250), nullable=False)
+    Id_People = Column(Integer, ForeignKey('people.Id'), nullable=False)
+    Id_Planets = Column(Integer, ForeignKey('planets.Id'), nullable=False)
+    Id_starships = Column(Integer, ForeignKey('starships.Id'), nullable=False)
+    Id_vehicles = Column(Integer, ForeignKey('vehicles.Id'), nullable=False)
+    Id_species = Column(Integer, ForeignKey('species.Id'), nullable=False)
+    PeopleId = relationship('people')
+    PeopleId = relationship('planets')
+    PeopleId = relationship('starships')
+    PeopleId = relationship('vehicles')
+    PeopleId = relationship('species')
+
+class User(Base):
     __tablename__ = 'user'
     # Notice that each column is also a normal Python instance attribute. 
     id = Column(Integer, primary_key=True)
-    Name = Column(String(50), unique = true, nullable=False)
+    Name = Column(String(50), unique = True, nullable=False)
     Last_Name = Column(String(50), nullable=False)
     UserName = Column(String(50), nullable=False)
-    Id_Login = Column(db.Integer, db.ForeignKey('Login.Id'), nullable=False)
+    Id_Login = Column(Integer, ForeignKey('login.Id'), nullable=False)
+    LoginId = relationship('login')
 
-    class Login(Base):
+class Login(Base):
     __tablename__ = 'login'
     # Notice that each column is also a normal Python instance attribute. 
     id = Column(Integer, primary_key=True)
@@ -144,20 +152,29 @@ class Films(Base):
     Pepeer = Column(String(500), nullable=False)
     salt = Column(String(500), nullable=False)
 
-    class Favorites(Base):
+class Type (Base):
+    __tablename__ = 'type'
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    Id_favorite = Column(Integer, nullable=False)
+    UserId = relationship('user')
+    PeopleId = relationship('people')
+    PlanetsId = relationship('planets')
+    StarshipsId = relationship('starships')
+    VehiclesId = relationship('vehicles')
+    SpeciesId = relationship('species')
+
+class Favorites(Base):
     __tablename__ = 'favorites'
     # Notice that each column is also a normal Python instance attribute. 
     id = Column(Integer, primary_key=True)
-    UserName = Column(db.Integer, db.ForeignKey('User.Id'), nullable=False)
-    Id_People = Column(db.Integer, db.ForeignKey('people.Id'), nullable=False)
-    Id_Planets = Column(db.Integer, db.ForeignKey('planets.Id'), nullable=False)
-    Id_starships = Column(db.Integer, db.ForeignKey('starships.Id'), nullable=False)
-    Id_vehicles = Column(db.Integer, db.ForeignKey('vehicles.Id'), nullable=False)
-    Id_species = Column(db.Integer, db.ForeignKey('species.Id'), nullable=False)
-    Id_films = Column(db.Integer, db.ForeignKey('films.Id'), nullable=False)
+    UserName = Column(Integer, ForeignKey('User.Id'), nullable=False)
+    Id_Type = Column(Integer, ForeignKey('User.Id'), nullable=False)
+    PeopleId = relationship('user')
+    TypeId = relationship('type')
 
-
-
+    def to_dict(self):
+        return {}
 
 ## Draw from SQLAlchemy base
 render_er(Base, 'diagram1.png')
